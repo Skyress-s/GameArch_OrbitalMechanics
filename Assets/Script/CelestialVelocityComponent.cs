@@ -2,7 +2,7 @@
 using Unity.Mathematics;
 
 namespace Script {
-    public struct CelestialVelocity : IComponentData {
+    public struct CelestialVelocityComponent : IComponentData {
         public float3 celestialVelocity;
     }
 }
