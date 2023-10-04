@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2181737825235254871}
   - component: {fileID: 8241964542569361435}
   - component: {fileID: 5575504054142855192}
-  - component: {fileID: 7407960896680627973}
   - component: {fileID: 8094412152999192909}
   m_Layer: 0
   m_Name: CelestialBody
@@ -85,27 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &7407960896680627973
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1317402899607789557}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8094412152999192909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,3 +97,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 0
+  initialVelocity: {x: 0, y: 0, z: 0}
+  isSun: 0
