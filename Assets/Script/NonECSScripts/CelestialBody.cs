@@ -21,9 +21,20 @@ namespace Script.NonECSScripts
         private float mass = 1;
 
         [SerializeField] private Vector3 initialVelocity = Vector3.zero;
+        [SerializeField] private bool isSun;
+        
+        public bool IsSun
+        {
+            get => isSun;
+            set => isSun = value;
+        }
 
-        public float Mass => mass;
-
+        public float Mass
+        {
+            get => mass;
+            set => mass = value;
+        }
+        
         public void Awake()
         {
             Velocity = initialVelocity;
