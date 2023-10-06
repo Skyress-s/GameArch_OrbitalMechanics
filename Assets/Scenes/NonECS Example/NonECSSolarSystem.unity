@@ -1532,7 +1532,7 @@ PrefabInstance:
     - target: {fileID: 9194658403021233857, guid: 64c3604a0beab244fa1d89984c50bdd2,
         type: 3}
       propertyPath: numberOfLengthUnitsPerAu
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 9194658403021233857, guid: 64c3604a0beab244fa1d89984c50bdd2,
         type: 3}
