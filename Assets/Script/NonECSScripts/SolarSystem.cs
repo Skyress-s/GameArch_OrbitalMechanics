@@ -77,6 +77,32 @@ namespace Script.NonECSScripts
             Debug.Log("After centering");
         }
 
+        private void OnDrawGizmos()
+        {
+            if (!Application.isPlaying) return;
+            
+            foreach (var body in _celestialBodies)
+            {
+                if (body == _sun) continue;
+                var pos = body.transform.position;
+                Gizmos.DrawLine(pos, new Vector3(pos.x, _sun.transform.position.y, pos.z));
+            }
+
+            DrawWireDisk(_barycenterPos, lengthUnitsPerAU * 40f, Color.green);
+        }
+
+        private static void DrawWireDisk(Vector3 position, float radius, Color color)
+        {
+            Color oldColor = Gizmos.color;
+            color.a = 0.125f;
+            Gizmos.color = color;
+            Matrix4x4 oldMatrix = Gizmos.matrix;
+            Gizmos.matrix = Matrix4x4.TRS(position, Quaternion.identity, new Vector3(1, 1e-4f, 1));
+            Gizmos.DrawSphere(Vector3.zero, radius);
+            Gizmos.matrix = oldMatrix;
+            Gizmos.color = oldColor;
+        }
+
         private void CenterBarycenter()
         {
             foreach (var body in _celestialBodies)
