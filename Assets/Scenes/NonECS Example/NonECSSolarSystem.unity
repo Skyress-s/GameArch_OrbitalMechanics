@@ -1531,11 +1531,6 @@ PrefabInstance:
       objectReference: {fileID: 4900000, guid: 820fa799692134b42a38fbf017012fb5, type: 3}
     - target: {fileID: 9194658403021233857, guid: 64c3604a0beab244fa1d89984c50bdd2,
         type: 3}
-      propertyPath: secondsPerSimulatedYear
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 9194658403021233857, guid: 64c3604a0beab244fa1d89984c50bdd2,
-        type: 3}
       propertyPath: numberOfLengthUnitsPerAu
       value: 2
       objectReference: {fileID: 0}
