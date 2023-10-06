@@ -23,9 +23,9 @@ namespace Script.NonECSScripts
     {
         [SerializeField] private TextAsset initialConditions;
         [SerializeField] private bool forceOrbits;
-        [SerializeField] private float numberOfTimeUnitsPerEarthOrbit = 12f;
-        [SerializeField] private float numberOfLengthUnitsPerAu = 10f;
-        [SerializeField] private float numberOfMassUnitsPerSolarMass = 100f;
+        [SerializeField] private float secondsPerSimulatedYear = 12f;
+        [SerializeField] private float lengthUnitsPerAU = 3f;
+        [SerializeField] private float massUnitsPerSolarMass = 100f;
         private CelestialBody[] _celestialBodies;
 
         private float G;
@@ -40,8 +40,8 @@ namespace Script.NonECSScripts
         private void Start()
         {
             // Calculates correct gravitational constant from our unit scale:
-            G = Mathf.PI * Mathf.PI * 4f * numberOfLengthUnitsPerAu * numberOfLengthUnitsPerAu *
-                numberOfLengthUnitsPerAu / (numberOfMassUnitsPerSolarMass * numberOfTimeUnitsPerEarthOrbit * numberOfTimeUnitsPerEarthOrbit);
+            G = Mathf.PI * Mathf.PI * 4f * lengthUnitsPerAU * lengthUnitsPerAU *
+                lengthUnitsPerAU / (massUnitsPerSolarMass * secondsPerSimulatedYear * secondsPerSimulatedYear);
 
             // collecting celestial bodies added in scene:
             _celestialBodies = new CelestialBody[transform.childCount];
@@ -176,9 +176,9 @@ namespace Script.NonECSScripts
             for (int i = 0; i < numInits; i++)
             {
                 _celestialBodies[i].IsSun = i < 1;
-                _celestialBodies[i].transform.position = positions[i] * numberOfLengthUnitsPerAu;
-                _celestialBodies[i].Velocity = velocities[i] * (numberOfLengthUnitsPerAu/numberOfTimeUnitsPerEarthOrbit);
-                _celestialBodies[i].Mass = masses[i] * numberOfMassUnitsPerSolarMass;
+                _celestialBodies[i].transform.position = positions[i] * lengthUnitsPerAU;
+                _celestialBodies[i].Velocity = velocities[i] * (lengthUnitsPerAU/secondsPerSimulatedYear);
+                _celestialBodies[i].Mass = masses[i] * massUnitsPerSolarMass;
             }
         }
     }
