@@ -33,12 +33,17 @@ namespace Script.NonECSScripts
         private Vector3 _barycenterVel = Vector3.zero;
         private CelestialBody _sun;
         private float _totalMass;
+        private float _potentialEnergy;
+        private float _kineticEnergy;
+        private float _totalEnergy;
 
         private void Start()
         {
+            // Calculates correct gravitational constant from our unit scale:
             G = Mathf.PI * Mathf.PI * 4f * numberOfLengthUnitsPerAu * numberOfLengthUnitsPerAu *
-                numberOfLengthUnitsPerAu / (numberOfMassUnitsPerSolarMass * numberOfTimeUnitsPerEarthOrbit);
+                numberOfLengthUnitsPerAu / (numberOfMassUnitsPerSolarMass * numberOfTimeUnitsPerEarthOrbit * numberOfTimeUnitsPerEarthOrbit);
 
+            // collecting celestial bodies added in scene:
             _celestialBodies = new CelestialBody[transform.childCount];
             
             for (int i = 0; i < transform.childCount; i++)
@@ -48,6 +53,7 @@ namespace Script.NonECSScripts
 
             if (initialConditions != null)
             {
+                // initializes orbital data:
                 InitSystemFromFile();
             }
             
@@ -67,6 +73,12 @@ namespace Script.NonECSScripts
                     body.Velocity = new Vector3(Mathf.Sqrt(G * _sun.Mass / r), 0f, 0f);
                 }
 
+            CenterBarycenter();
+            Debug.Log("After centering");
+        }
+
+        private void CenterBarycenter()
+        {
             foreach (var body in _celestialBodies)
             {
                 _barycenterVel += body.Velocity * body.Mass;
@@ -84,23 +96,27 @@ namespace Script.NonECSScripts
                 body.Velocity -= _barycenterVel;
                 body.transform.position -= _barycenterPos;
             }
-            Debug.Log("After centering");
         }
 
         private void FixedUpdate()
         {
             foreach (var currentBody in _celestialBodies)
             {
+                // temp variables for acceleration
                 var aCurrent = Vector3.zero;
                 var aNext = Vector3.zero;
 
+                // derive acceleration at current position from interaction potential:
                 foreach (var otherBody in _celestialBodies) aCurrent += Gravity(currentBody, otherBody);
 
+                // calculate new position:
                 currentBody.transform.position += currentBody.Velocity * Time.fixedDeltaTime +
                                                   aCurrent * (0.5f * Time.fixedDeltaTime * Time.fixedDeltaTime);
 
+                // derive new acceleration at updated position using interaction potential:
                 foreach (var otherBody in _celestialBodies) aNext += Gravity(currentBody, otherBody);
 
+                // calculate new velocity using mean acceleration between old and new position:
                 currentBody.Velocity += (aCurrent + aNext) * (0.5f * Time.fixedDeltaTime);
             }
         }
