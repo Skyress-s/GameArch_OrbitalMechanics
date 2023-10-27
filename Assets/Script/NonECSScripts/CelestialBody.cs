@@ -34,10 +34,25 @@ namespace Script.NonECSScripts
             get => mass;
             set => mass = value;
         }
+
+        public Vector3 CurrentForce { private get; set; }
         
         public void Awake()
         {
             Velocity = initialVelocity;
+        }
+
+        private void OnDrawGizmos()
+        {
+            var position = transform.position;
+            var forcePos = position + CurrentForce.normalized * 0.16f;
+            var velPos = position + Velocity.normalized*0.16f;
+            
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(forcePos, forcePos + CurrentForce);
+
+            Gizmos.color = new Color(1f, 0.5f, 0f);
+            Gizmos.DrawLine(velPos, velPos + Velocity);
         }
 
         public Vector3 Velocity { get; set; }

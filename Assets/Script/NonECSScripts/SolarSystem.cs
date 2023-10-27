@@ -135,6 +135,8 @@ namespace Script.NonECSScripts
                 // derive acceleration at current position from interaction potential:
                 foreach (var otherBody in _celestialBodies) aCurrent += Gravity(currentBody, otherBody);
 
+                currentBody.CurrentForce = aCurrent;
+
                 // calculate new position:
                 currentBody.transform.position += currentBody.Velocity * Time.fixedDeltaTime +
                                                   aCurrent * (0.5f * Time.fixedDeltaTime * Time.fixedDeltaTime);
