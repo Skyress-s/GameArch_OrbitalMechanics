@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 namespace Script.NonECSScripts.Player {
     public class PlanetPlayerController : PlayerController {
         public PlanetPlayer planetPlayer;
-
+        
         public Vector3 ControlRotation = Vector3.zero;
         public float Zoom = 0f;
         [SerializeField] private float _mouseSensetivity = 1f;
@@ -14,7 +14,13 @@ namespace Script.NonECSScripts.Player {
 
         private Vector2 _mousePosLastFrame;
 
-        private void Start() {
+        private void Awake() {
+            if (Instance != null) {
+                Destroy(this);       
+            }
+            else {
+                Instance = this;
+            }
         }
 
         private void Update() {
@@ -32,12 +38,13 @@ namespace Script.NonECSScripts.Player {
             if (Input.GetKey(KeyCode.Mouse2)) {
                 Vector2 mousePositionDelta = (Vector2)Input.mousePosition - _mousePosLastFrame;
 
-                ControlRotation.x += mousePositionDelta.y * _mouseSensetivity;
-                ControlRotation.y -= mousePositionDelta.x * _mouseSensetivity;
+                ControlRotation.x -= mousePositionDelta.y * _mouseSensetivity;
+                ControlRotation.y += mousePositionDelta.x * _mouseSensetivity;
 
-                planetPlayer.transform.localEulerAngles = ControlRotation;
+                // planetPlayer.transform.localEulerAngles = ControlRotation;
             }
-
+            
+            planetPlayer.SetCameraLength(Input.mouseScrollDelta[1] * _scrollSensetivity);
             planetPlayer.AddToCameraLength(Input.mouseScrollDelta[1] * _scrollSensetivity);
             
             _mousePosLastFrame = Input.mousePosition;

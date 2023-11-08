@@ -5,6 +5,28 @@ namespace Script.NonECSScripts.Player {
     public class PlanetPlayer : MonoBehaviour {
         private CelestialBody targetCelestianBody = null;
         private Camera camera;
+        private PlanetPlayerController _planetPlayerController;
+
+        private void Start() {
+            camera = GetComponentInChildren<Camera>();
+            _planetPlayerController = PlanetPlayerController.Instance as PlanetPlayerController;
+        }
+
+        private void Update() {
+            if (targetCelestianBody) {
+                transform.position = Vector3.Lerp(transform.position, targetCelestianBody.transform.position,
+                    Time.deltaTime * 8f);
+            }
+            
+            // Sets target celestial body
+            Quaternion targetRot = Quaternion.Euler(_planetPlayerController.ControlRotation);
+            
+            // Set target rotation
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 7f);
+            
+            // SetZoom
+            
+        }
 
         public Camera GetCamera() {
             return camera;
@@ -20,18 +42,15 @@ namespace Script.NonECSScripts.Player {
             
         }
 
+        public void SetCameraLength(float newLength) {
+            var pos = camera.transform.localPosition;
+            pos.z = Mathf.Max(newLength, 0f);
+            
+        }
+
 
         public void SetTargetCelestianBody(CelestialBody celestialBody) {
             targetCelestianBody = celestialBody;
-        }
-        private void Start() {
-            camera = GetComponentInChildren<Camera>();
-        }
-
-        private void Update() {
-            if (targetCelestianBody) {
-                transform.position = targetCelestianBody.transform.position;
-            }
         }
     }
 }

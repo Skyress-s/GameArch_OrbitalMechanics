@@ -29,6 +29,7 @@ namespace Script.NonECSScripts.Cosmetic {
             if (_lr == null) {
                 return;
             }
+            
             Vector3 lastTrailPos = _lr.GetPosition(0);
             
             if (Vector3.Distance(lastTrailPos, transform.position) < 0.4f && _lr.positionCount >= 2) { // last point close enough
