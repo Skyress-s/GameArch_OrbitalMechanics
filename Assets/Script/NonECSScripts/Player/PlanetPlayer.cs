@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Script.NonECSScripts.Player {
     public class PlanetPlayer : MonoBehaviour {
-        private CelestialBody targetCelestianBody = null;
+        [SerializeField]private CelestialBody targetCelestianBody = null;
         private Camera camera;
         private PlanetPlayerController _planetPlayerController;
 
