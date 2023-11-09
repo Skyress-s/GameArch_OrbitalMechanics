@@ -11,11 +11,9 @@
 // //////////////////////////////
 
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.NonECSScripts
 {
@@ -28,7 +26,7 @@ namespace Script.NonECSScripts
         [SerializeField] private float massUnitsPerSolarMass = 100f;
         private CelestialBody[] _celestialBodies;
 
-        private float G;
+        private float G { get; }
         private Vector3 _barycenterPos = Vector3.zero;
         private Vector3 _barycenterVel = Vector3.zero;
         private CelestialBody _sun;
@@ -37,12 +35,21 @@ namespace Script.NonECSScripts
         private float _kineticEnergy;
         private float _totalEnergy;
 
-        private void Start()
+        private SolarSystem()
         {
-            // Calculates correct gravitational constant from our unit scale:
+            // Kepler's 3rd law of planetary motion: a^2/T^3 = G*M/(4*pi^2),
+            //  - a: semi-major axis of planet's orbit (set to mean distance between Earth and Sun: 1 astronomical unit).
+            //  - T: orbital period of planet (set to Earth's: 1 year).
+            //  - G: Newton's gravitational constant (needs to be calculated).
+            //  - M: Mass of system's star (set to the Sun's: 1 Solar Mass).
+            
+            // Calculates correct gravitational constant G = 4*(pi^2)*(a^2)/(M*T^3) from our unit scale:
             G = Mathf.PI * Mathf.PI * 4f * lengthUnitsPerAU * lengthUnitsPerAU *
                 lengthUnitsPerAU / (massUnitsPerSolarMass * secondsPerSimulatedYear * secondsPerSimulatedYear);
-
+        }
+        
+        private void Start()
+        {
             // collecting celestial bodies added in scene:
             _celestialBodies = new CelestialBody[transform.childCount];
             
@@ -105,6 +112,7 @@ namespace Script.NonECSScripts
 
         private void CenterBarycenter()
         {
+            // Calculate center of mass position and velocity:
             foreach (var body in _celestialBodies)
             {
                 _barycenterVel += body.Velocity * body.Mass;
@@ -117,6 +125,7 @@ namespace Script.NonECSScripts
             _barycenterVel /= _totalMass > 0 ? _totalMass : 1f;
             _barycenterPos /= _totalMass > 0 ? _totalMass : 1f;
 
+            // make center of mass stationary at coordinates (0,0,0):
             foreach (var body in _celestialBodies)
             {
                 body.Velocity -= _barycenterVel;
@@ -137,21 +146,23 @@ namespace Script.NonECSScripts
 
                 currentBody.CurrentForce = aCurrent;
 
-                // calculate new position:
+                // calculate new position using equation of motion r_n+1 = r_n + v_n * dt + 0.5*a_n*dt^2:
                 currentBody.transform.position += currentBody.Velocity * Time.fixedDeltaTime +
                                                   aCurrent * (0.5f * Time.fixedDeltaTime * Time.fixedDeltaTime);
 
                 // derive new acceleration at updated position using interaction potential:
                 foreach (var otherBody in _celestialBodies) aNext += Gravity(currentBody, otherBody);
 
-                // calculate new velocity using mean acceleration between old and new position:
+                // calculate new velocity using v_n+1 = v_n + 0.5*(a_n+1 + a_n)*dt:
                 currentBody.Velocity += (aCurrent + aNext) * (0.5f * Time.fixedDeltaTime);
             }
         }
 
         private Vector3 Gravity(Component A, CelestialBody B)
         {
-            if (A == B) return Vector3.zero;
+            if (A == B) return Vector3.zero;  // no interaction with self
+            
+            // calculate acceleration due to gravity from body B on A:
             var rAB = B.transform.position - A.transform.position;
             return G * B.Mass * rAB.normalized / rAB.sqrMagnitude;
         }
