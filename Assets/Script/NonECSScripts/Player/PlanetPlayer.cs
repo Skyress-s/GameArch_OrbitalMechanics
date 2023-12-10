@@ -52,5 +52,9 @@ namespace Script.NonECSScripts.Player {
         public void SetTargetCelestianBody(CelestialBody celestialBody) {
             targetCelestianBody = celestialBody;
         }
+        
+        public CelestialBody GetTargetCelestianBody() {
+            return targetCelestianBody;
+        }
     }
 }

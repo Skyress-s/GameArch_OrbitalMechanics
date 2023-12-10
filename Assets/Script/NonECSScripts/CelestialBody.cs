@@ -10,7 +10,11 @@
 // //////////////////////////////////////////////////////////////////////////
 // //////////////////////////////
 
+
+using Script.UI;
+
 using Unity.Mathematics;
+
 using UnityEngine;
 
 namespace Script.NonECSScripts
@@ -22,7 +26,7 @@ namespace Script.NonECSScripts
         Disabled
     }
 
-    public class CelestialBody : MonoBehaviour
+    public class CelestialBody : MonoBehaviour, IPlanetaryInfo
     {
         [SerializeField] [Min(1e-7f)] [Tooltip("Unit: Solar masses.")]
         private float mass = 1;
@@ -160,6 +164,10 @@ namespace Script.NonECSScripts
         public float KineticEnergy()
         {
             return 0.5f * mass * Velocity.sqrMagnitude;
+        }
+
+        public string GetInfo() {
+            return $"--{name}--\nMass : {Mass}\nPosition : {transform.position}\nVelocity : {Velocity}\nKinetic Energy : {KineticEnergy()}";
         }
     }
 }
