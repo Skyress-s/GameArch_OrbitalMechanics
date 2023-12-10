@@ -33,6 +33,8 @@ namespace Script.NonECSScripts
         private CelestialBody _sun;
         private float _totalEnergy;
         private float _totalMass;
+        private Vector2 _minMaxForce = new Vector2(float.MaxValue, float.MinValue);
+        private Vector2 _minMaxVelocity = new Vector2(float.MaxValue, float.MinValue);
 
         private SolarSystem()
         {
@@ -51,13 +53,20 @@ namespace Script.NonECSScripts
         private float G { get; }
         public float systemMass => _totalMass;
 
+        public Vector2 minMaxForce => _minMaxForce;
+
+        public Vector2 minMaxVelocity => _minMaxVelocity;
+
         private void Start()
         {
             // collecting celestial bodies added in scene:
             _celestialBodies = new CelestialBody[transform.childCount];
 
             for (var i = 0; i < transform.childCount; i++)
+            {
                 _celestialBodies[i] = transform.GetChild(i).GetComponent<CelestialBody>();
+                _celestialBodies[i].parentSystem = this;
+            }
 
             if (initialConditions != null)
                 // initializes orbital data from file:
@@ -95,6 +104,11 @@ namespace Script.NonECSScripts
                 foreach (var otherBody in _celestialBodies) aCurrent += Gravity(currentBody, otherBody);
 
                 currentBody.CurrentForce = aCurrent;
+                
+                // find min and max force for visualization
+                var forceAnalog = aCurrent.magnitude;
+                _minMaxForce.x = Mathf.Min(forceAnalog, minMaxForce.x);
+                _minMaxForce.y = Mathf.Max(forceAnalog, minMaxForce.y);
 
                 // calculate new position using equation of motion r_n+1 = r_n + v_n * dt + 0.5*a_n*dt^2:
                 currentBody.transform.position += currentBody.Velocity * Time.fixedDeltaTime +
@@ -105,6 +119,11 @@ namespace Script.NonECSScripts
 
                 // calculate new velocity using v_n+1 = v_n + 0.5*(a_n+1 + a_n)*dt:
                 currentBody.Velocity += (aCurrent + aNext) * (0.5f * Time.fixedDeltaTime);
+
+                // find min and max velocity for visualization
+                var vel = currentBody.Velocity.magnitude;
+                _minMaxVelocity.x = Mathf.Min(forceAnalog, minMaxForce.x);
+                _minMaxVelocity.y = Mathf.Max(forceAnalog, minMaxForce.y);
             }
         }
 
