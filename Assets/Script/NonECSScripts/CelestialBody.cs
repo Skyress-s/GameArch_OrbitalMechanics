@@ -127,12 +127,13 @@ namespace Script.NonECSScripts
             var unitArr = arr.normalized;
             
             var r = MapToUnitInterval(arr.magnitude, minMax.x, minMax.y);
+            r = ArrowType == ArrowMode.Force ? Mathf.Sqrt(r) : r;
 
             _arrowMat.SetColor(ArrowColor, new Color(r, 0, 1-r));
 
-            _arrow.position = position + unitArr * 0.05f;
+            _arrow.position = position + unitArr * 0.1f;
             var scale = _arrow.localScale;
-            scale.z = (2f*r + 1f)*10f;
+            scale.z = (2f*r + 0.5f)*10f;
             _arrow.localScale = scale;
             _arrow.forward = arr;
         }
@@ -152,7 +153,7 @@ namespace Script.NonECSScripts
 
         private static float MapToUnitInterval(float x, float min, float max)
         {
-            return Mathf.Sqrt((x - min) / (max - min));
+            return (x - min) / (max - min);
         }
 
 
