@@ -11,6 +11,7 @@
 // //////////////////////////////
 
 
+using System;
 using Script.UI;
 
 using Unity.Mathematics;
@@ -21,7 +22,7 @@ namespace Script.NonECSScripts
 {
     public enum ArrowMode
     {
-        Force,
+        Force,  
         Velocity,
         Disabled
     }
@@ -69,6 +70,9 @@ namespace Script.NonECSScripts
         }
 
         public Vector3 CurrentForce { private get; set; }
+        
+        public float AxialTilt { get; set; }
+        public float RotationalSpeed { get; set; }
 
         public void Awake()
         {
@@ -85,6 +89,14 @@ namespace Script.NonECSScripts
             _hasArrow = _arrowMat != null;
             
             _arrowMat.SetColor(ArrowColor, Color.clear);
+
+            gameObject.transform.localRotation = Quaternion.AngleAxis(AxialTilt, Vector3.right);
+        }
+
+        private void FixedUpdate()
+        {
+            var rotDelta = RotationalSpeed * Time.fixedDeltaTime;
+            transform.Rotate(0, rotDelta, 0, Space.Self);
         }
 
         private void LateUpdate()
