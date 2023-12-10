@@ -3228,6 +3228,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: SolarSystem
       objectReference: {fileID: 0}
+    - target: {fileID: 7973327804128659601, guid: 876f2f003a1233849b79d82afc057dbe,
+        type: 3}
+      propertyPath: lengthUnitsPerAU
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973327804128659601, guid: 876f2f003a1233849b79d82afc057dbe,
+        type: 3}
+      propertyPath: massUnitsPerSolarMass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7973327804128659601, guid: 876f2f003a1233849b79d82afc057dbe,
+        type: 3}
+      propertyPath: secondsPerSimulatedYear
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
