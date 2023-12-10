@@ -14,6 +14,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace Script.NonECSScripts
 {
