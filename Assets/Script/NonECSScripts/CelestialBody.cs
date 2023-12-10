@@ -10,7 +10,11 @@
 // //////////////////////////////////////////////////////////////////////////
 // //////////////////////////////
 
+
 using Script.UI;
+
+using Unity.Mathematics;
+
 using UnityEngine;
 
 namespace Script.NonECSScripts
@@ -41,6 +45,8 @@ namespace Script.NonECSScripts
 
         private Material _arrowMat;
         private static readonly int ArrowColor = Shader.PropertyToID("_ArrowColor");
+        
+        public SolarSystem parentSystem { get; set; }
 
         public bool IsSun
         {
@@ -98,6 +104,7 @@ namespace Script.NonECSScripts
                 _arrowEnabled = true;
             }
 
+            // set value to visualize based on enum:
             var arr = ArrowType switch
             {
                 ArrowMode.Force => CurrentForce,
@@ -105,13 +112,33 @@ namespace Script.NonECSScripts
                 ArrowMode.Disabled => Vector3.zero,
                 _ => Vector3.zero
             };
+
+            // set min-max values based on enum:
+            var minMax = ArrowType switch
+            {
+                ArrowMode.Force => parentSystem.minMaxForce,
+                ArrowMode.Velocity => parentSystem.minMaxVelocity,
+                ArrowMode.Disabled => new Vector2(0, 1),
+                _ => new Vector2(0, 1)
+            };
+            
+            var position = transform.position;
+            // var scaleFactor = position.magnitude;
+            // scaleFactor *= scaleFactor;
+            //
+            // // minMax *= scaleFactor;
             
             var unitArr = arr.normalized;
-            var r = MapToUnitInterval(arr.magnitude, 3f, 1f);
-            Debug.Log($"{r} | {arr.magnitude}");
-            _arrowMat.SetColor(ArrowColor, new Color(r, 1-r, 0));
             
-            _arrow.position = transform.position + unitArr * 0.16f;
+            var r = MapToUnitInterval(arr.magnitude, minMax.x, minMax.y);
+            r = ArrowType == ArrowMode.Force ? Mathf.Sqrt(r) : r;
+
+            _arrowMat.SetColor(ArrowColor, new Color(r, 0, 1-r));
+
+            _arrow.position = position + unitArr * 0.1f;
+            var scale = _arrow.localScale;
+            scale.z = (2f*r + 0.5f)*10f;
+            _arrow.localScale = scale;
             _arrow.forward = arr;
         }
 
@@ -128,9 +155,9 @@ namespace Script.NonECSScripts
             Gizmos.DrawLine(velPos, velPos + Velocity);
         }
 
-        private static float MapToUnitInterval(float x, float strength, float offset)
+        private static float MapToUnitInterval(float x, float min, float max)
         {
-            return Mathf.Approximately(strength*x, 0) ? 0: 1 / (1 + Mathf.Exp(-strength*x + offset));
+            return (x - min) / (max - min);
         }
 
 
