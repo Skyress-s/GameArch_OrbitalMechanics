@@ -11,11 +11,7 @@
 // //////////////////////////////
 
 
-using System;
 using Script.UI;
-
-using Unity.Mathematics;
-
 using UnityEngine;
 
 namespace Script.NonECSScripts
