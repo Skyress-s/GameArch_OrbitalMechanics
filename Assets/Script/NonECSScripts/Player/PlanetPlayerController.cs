@@ -1,4 +1,5 @@
 ﻿using System;
+using Script.UI;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -25,14 +26,7 @@ namespace Script.NonECSScripts.Player {
 
         private void Update() {
             if (Input.GetKeyDown(KeyCode.Mouse0)) {
-                var ray = planetPlayer.GetCamera().ScreenPointToRay(Input.mousePosition);
-                if (Physics.SphereCast(ray, 1f, out RaycastHit hit, 100000)) {
-                    Debug.DrawRay(ray.origin, ray.direction.normalized*100, Color.red, 4f);
-                    CelestialBody celestialBody = hit.transform.GetComponent<CelestialBody>();
-                    if (celestialBody != null) {
-                        planetPlayer.SetTargetCelestianBody(celestialBody);
-                    }
-                }
+                HandleOnClickPrimary();
             }
 
             if (Input.GetKey(KeyCode.Mouse2)) {
@@ -48,6 +42,30 @@ namespace Script.NonECSScripts.Player {
             planetPlayer.AddToCameraLength(Input.mouseScrollDelta[1] * _scrollSensetivity);
             
             _mousePosLastFrame = Input.mousePosition;
+        }
+
+        private void HandleOnClickPrimary() {
+            var ray = planetPlayer.GetCamera().ScreenPointToRay(Input.mousePosition);
+            if (Physics.SphereCast(ray, 1f, out RaycastHit hit, 100000, LayerMask.GetMask("Default"))) {
+                CelestialBody celestialBody = hit.transform.GetComponent<CelestialBody>();
+                
+                if (celestialBody != null) {
+                    planetPlayer.SetTargetCelestianBody(celestialBody);
+                    UISingletonBuilder builder = new UISingletonBuilder();
+
+                    if (celestialBody.TryGetComponent(out IPlanetaryInfo planetaryInfo)) {
+                        builder.AddText(planetaryInfo.GetInfo());
+                        builder.AddButton("Move", OnStartMovePlanet);
+                        builder.Build(celestialBody.transform, Vector3.zero);
+                        
+                    }
+                }
+            }
+        }
+
+        private void OnStartMovePlanet() {
+            PlanetMover.Enable(planetPlayer.GetTargetCelestianBody().transform);
+            
         }
     }
 }
