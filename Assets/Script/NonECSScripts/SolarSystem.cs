@@ -66,6 +66,7 @@ namespace Script.NonECSScripts
             {
                 _celestialBodies[i] = transform.GetChild(i).GetComponent<CelestialBody>();
                 _celestialBodies[i].parentSystem = this;
+                _celestialBodies[i].ArrowType = ArrowMode.Disabled;
             }
 
             if (initialConditions != null)
