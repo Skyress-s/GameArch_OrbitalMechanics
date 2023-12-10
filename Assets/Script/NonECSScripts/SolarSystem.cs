@@ -203,12 +203,14 @@ namespace Script.NonECSScripts
             var positions = new Vector3[lines.Length];
             var velocities = new Vector3[lines.Length];
             var masses = new float[lines.Length];
+            var axialTilts = new float[lines.Length];
+            var rotationalSpeeds = new float[lines.Length];
 
             for (var i = 0; i < lines.Length; i++)
             {
                 // split line and read coordinates:
                 var elements = lines[i].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                if (elements.Length < 7)
+                if (elements.Length < 9)
                 {
                     Debug.LogWarning($"{initialConditions.name} is missing data on line {i}");
                     continue;
@@ -227,10 +229,13 @@ namespace Script.NonECSScripts
                 );
 
                 masses[i] = float.Parse(elements[6], CultureInfo.InvariantCulture);
+                axialTilts[i] = float.Parse(elements[7], CultureInfo.InvariantCulture);
+                rotationalSpeeds[i] = float.Parse(elements[8], CultureInfo.InvariantCulture);
             }
 
             var numInits = positions.Length < _celestialBodies.Length ? positions.Length : _celestialBodies.Length;
 
+            var daysToSecPerYear = secondsPerSimulatedYear / 366.2422f;
             // scale system data to chosen units:
             for (var i = 0; i < numInits; i++)
             {
@@ -238,6 +243,8 @@ namespace Script.NonECSScripts
                 _celestialBodies[i].transform.position = positions[i] * lengthUnitsPerAU;
                 _celestialBodies[i].Velocity = velocities[i] * (lengthUnitsPerAU / secondsPerSimulatedYear);
                 _celestialBodies[i].Mass = masses[i] * massUnitsPerSolarMass;
+                _celestialBodies[i].AxialTilt = axialTilts[i];
+                _celestialBodies[i].RotationalSpeed = rotationalSpeeds[i] * daysToSecPerYear;
             }
         }
     }
