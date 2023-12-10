@@ -36,21 +36,8 @@ namespace Script.NonECSScripts
         private Vector2 _minMaxForce = new Vector2(float.MaxValue, float.MinValue);
         private Vector2 _minMaxVelocity = new Vector2(float.MaxValue, float.MinValue);
 
-        private SolarSystem()
-        {
-            // Kepler's 3rd law of planetary motion: a^2/T^3 = G*M/(4*pi^2),
-            //  - a: semi-major axis of planet's orbit (set to mean distance between Earth and Sun: 1 astronomical unit).
-            //  - T: orbital period of planet (set to Earth's: 1 year).
-            //  - G: Newton's gravitational constant (needs to be calculated).
-            //  - M: Mass of system's star (set to the Sun's: 1 Solar Mass).
-
-            // Calculates correct gravitational constant G = 4*(pi^2)*(a^2)/(M*T^3) from our unit scale:
-            G = Mathf.PI * Mathf.PI * 4f * lengthUnitsPerAU * lengthUnitsPerAU *
-                lengthUnitsPerAU / (massUnitsPerSolarMass * secondsPerSimulatedYear * secondsPerSimulatedYear);
-        }
-
         // ReSharper disable once InconsistentNaming
-        private float G { get; }
+        private float G { get; set; }
         public float systemMass => _totalMass;
 
         public Vector2 minMaxForce => _minMaxForce;
@@ -59,6 +46,16 @@ namespace Script.NonECSScripts
 
         private void Start()
         {
+            // Kepler's 3rd law of planetary motion: a^3/T^2 = G*M/(4*pi^2),
+            //  - a: semi-major axis of planet's orbit (set to mean distance between Earth and Sun: 1 astronomical unit).
+            //  - T: orbital period of planet (set to Earth's: 1 year).
+            //  - G: Newton's gravitational constant (needs to be calculated).
+            //  - M: Mass of system's star (set to the Sun's: 1 Solar Mass).
+
+            // Calculates correct gravitational constant G = 4*(pi^2)*(a^3)/(M*T^2) from our unit scale:
+            G = Mathf.PI * Mathf.PI * 4f * lengthUnitsPerAU * lengthUnitsPerAU * lengthUnitsPerAU / (massUnitsPerSolarMass * secondsPerSimulatedYear * secondsPerSimulatedYear);
+            Debug.Log($"G = {G}");
+            
             // collecting celestial bodies added in scene:
             _celestialBodies = new CelestialBody[transform.childCount];
 
@@ -235,13 +232,13 @@ namespace Script.NonECSScripts
 
             var numInits = positions.Length < _celestialBodies.Length ? positions.Length : _celestialBodies.Length;
 
-            var daysToSecPerYear = secondsPerSimulatedYear / 366.2422f;
+            var daysToSecPerYear = secondsPerSimulatedYear * 366.2422f;
             // scale system data to chosen units:
             for (var i = 0; i < numInits; i++)
             {
                 _celestialBodies[i].IsSun = i < 1;
                 _celestialBodies[i].transform.position = positions[i] * lengthUnitsPerAU;
-                _celestialBodies[i].Velocity = velocities[i] * (lengthUnitsPerAU / secondsPerSimulatedYear);
+                _celestialBodies[i].Velocity = velocities[i] / secondsPerSimulatedYear * lengthUnitsPerAU;
                 _celestialBodies[i].Mass = masses[i] * massUnitsPerSolarMass;
                 _celestialBodies[i].AxialTilt = axialTilts[i];
                 _celestialBodies[i].RotationalSpeed = rotationalSpeeds[i] * daysToSecPerYear;
