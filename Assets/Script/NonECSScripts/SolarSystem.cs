@@ -11,6 +11,7 @@
 // //////////////////////////////
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using UnityEngine;
@@ -20,14 +21,20 @@ namespace Script.NonECSScripts
 {
     public class SolarSystem : MonoBehaviour
     {
+        [Header("Defaults")]
         [SerializeField] private TextAsset initialConditions;
+
+        [SerializeField] private CelestialBody defaultBody;
         [SerializeField] private bool forceOrbits;
+        
+        [Header("Unit Scaling")]
         [SerializeField] private float secondsPerSimulatedYear = 12f;
         [SerializeField] private float lengthUnitsPerAU = 3f;
         [SerializeField] private float massUnitsPerSolarMass = 100f;
+        
         private Vector3 _barycenterPos = Vector3.zero;
         private Vector3 _barycenterVel = Vector3.zero;
-        private CelestialBody[] _celestialBodies;
+        private List<CelestialBody> _celestialBodies;
         private float _kineticEnergy;
         private float _potentialEnergy;
         private CelestialBody _sun;
@@ -57,13 +64,13 @@ namespace Script.NonECSScripts
             Debug.Log($"G = {G}");
             
             // collecting celestial bodies added in scene:
-            _celestialBodies = new CelestialBody[transform.childCount];
+            _celestialBodies = new List<CelestialBody>();
 
             for (var i = 0; i < transform.childCount; i++)
             {
-                _celestialBodies[i] = transform.GetChild(i).GetComponent<CelestialBody>();
-                _celestialBodies[i].parentSystem = this;
-                _celestialBodies[i].ArrowType = ArrowMode.Disabled;
+                _celestialBodies.Add(transform.GetChild(i).GetComponent<CelestialBody>());
+                _celestialBodies[^1].parentSystem = this;
+                _celestialBodies[^1].ArrowType = ArrowMode.Disabled;
             }
 
             if (initialConditions != null)
@@ -183,6 +190,34 @@ namespace Script.NonECSScripts
             return G * B.Mass * rAB.normalized / rAB.sqrMagnitude;
         }
 
+        /// <summary>
+        /// Adds planet to system
+        /// </summary>
+        /// <param name="pos">position to add planet at</param>
+        /// <param name="forceOrbit">if true - force orbit around sun</param>
+        /// <param name="mass">mass of new planet [solar masses]</param>
+        /// <param name="axialTilt">axialTilt of planet [deg]</param>
+        /// <param name="rotRate">rotation rate of planet [deg/day]</param>
+        /// <returns></returns>
+        public CelestialBody AddPlanet(Vector3 pos, bool forceOrbit = true, float mass = 3e-6f, float axialTilt = 23.44f, float rotRate = 366.2422f)
+        {
+            var newBody = Instantiate<CelestialBody>(defaultBody, pos, Quaternion.identity, transform);
+            newBody.parentSystem = this;
+            newBody.ArrowType = ArrowMode.Disabled;
+            newBody.Mass = mass * massUnitsPerSolarMass;
+            newBody.AxialTilt = axialTilt;
+            newBody.RotationalSpeed = rotRate * secondsPerSimulatedYear * 366.2422f;
+
+            if (forceOrbit)
+            {
+                var rVec = pos - _sun.transform.position;
+                newBody.Velocity = Mathf.Sqrt(G * _sun.Mass / rVec.magnitude) * Vector3.Cross(rVec,Vector3.up).normalized;
+            }
+
+            _celestialBodies.Add(newBody);
+            return _celestialBodies[^1];
+        }
+
         private void InitSystemFromFile()
         {
             // defines which characters to split file into lines on:
@@ -230,7 +265,7 @@ namespace Script.NonECSScripts
                 rotationalSpeeds[i] = float.Parse(elements[8], CultureInfo.InvariantCulture);
             }
 
-            var numInits = positions.Length < _celestialBodies.Length ? positions.Length : _celestialBodies.Length;
+            var numInits = positions.Length < _celestialBodies.Count ? positions.Length : _celestialBodies.Count;
 
             var daysToSecPerYear = secondsPerSimulatedYear * 366.2422f;
             // scale system data to chosen units:
