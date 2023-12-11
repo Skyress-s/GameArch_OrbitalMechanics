@@ -13,9 +13,13 @@ namespace Script.NonECSScripts.Player {
         public float Zoom = 0f;
         [SerializeField] private float _mouseSensetivity = 1f;
         [SerializeField] private float _scrollSensetivity = 1f;
-
+    
+        
+        private bool bWaitingForNewPlanetClick = false;
 
         private Vector2 _mousePosLastFrame;
+        
+        [SerializeField] private Collider XZCollider;
 
         private void Awake() {
             if (Instance != null) {
@@ -28,7 +32,13 @@ namespace Script.NonECSScripts.Player {
 
         private void Update() {
             if (Input.GetKeyDown(KeyCode.Mouse0)) {
-                HandleOnClickPrimary();
+                if (bWaitingForNewPlanetClick) {
+                    PlaceNewPlanet();
+                }
+                else {
+                    
+                    HandleOnClickPrimary();
+                }
             }
 
             if (Input.GetKey(KeyCode.Mouse2)) {
@@ -73,6 +83,8 @@ namespace Script.NonECSScripts.Player {
                 }
             }
         }
+        
+        //https://forum.unity.com/threads/how-to-detect-if-mouse-is-over-ui.1025533/
         //Returns 'true' if we touched or hovering on Unity UI element.
         public bool IsPointerOverUIElement()
         {
@@ -90,6 +102,28 @@ namespace Script.NonECSScripts.Player {
                     return true;
             }
             return false;
+        }
+
+        public void OnClickPlaceNewPlanet() {
+            bWaitingForNewPlanetClick = true;
+            XZCollider.enabled = true;
+        }
+
+        private void PlaceNewPlanet() {
+            var ray = planetPlayer.GetCamera().ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit, 100000, LayerMask.GetMask("Water"))) {
+                SpawnNewPlanet(hit.point);
+                
+            }
+
+            XZCollider.enabled = false;
+            bWaitingForNewPlanetClick = false;
+        }
+
+
+        private void SpawnNewPlanet(Vector3 position) {
+            // Logic here for spawning new planet!
+            Debug.DrawRay(position, Vector3.up * 1000f, Color.red, 100f);
         }
  
  
