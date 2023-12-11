@@ -36,16 +36,20 @@ public class UISingleton : MonoBehaviour
         _verticalLayoutGroup.transform.position = screenSpace;
     }
 
-
+    public void Empty() {
+        for (int i = _verticalLayoutGroup.transform.childCount - 1; i >= 0; i--) {
+            Destroy(_verticalLayoutGroup.transform.GetChild(i).gameObject);
+        }
+    }
+    
     public RectTransform RequestAt(Transform targetTransform, Vector3 offset) {
         // while (_verticalLayoutGroup.transform.childCount > 0) {
         //     Destroy(_verticalLayoutGroup.transform.GetChild(0).gameObject);
         // }
-        for (int i = _verticalLayoutGroup.transform.childCount - 1; i >= 0; i--) {
-            Destroy(_verticalLayoutGroup.transform.GetChild(i).gameObject);
-        }
+        Empty();
 
-
+        
+        
         this.targetTransform = targetTransform;
         return _verticalLayoutGroup.GetComponent<RectTransform>();
 

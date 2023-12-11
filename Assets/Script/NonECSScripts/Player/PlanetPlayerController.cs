@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Script.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 
 namespace Script.NonECSScripts.Player {
@@ -45,22 +47,60 @@ namespace Script.NonECSScripts.Player {
         }
 
         private void HandleOnClickPrimary() {
+
+            if (IsPointerOverUIElement()) {
+                return;
+            }
+            
             var ray = planetPlayer.GetCamera().ScreenPointToRay(Input.mousePosition);
             if (Physics.SphereCast(ray, 1f, out RaycastHit hit, 100000, LayerMask.GetMask("Default"))) {
                 CelestialBody celestialBody = hit.transform.GetComponent<CelestialBody>();
                 
-                if (celestialBody != null) {
+                if (celestialBody != null && planetPlayer.GetTargetCelestianBody() != celestialBody) {
                     planetPlayer.SetTargetCelestianBody(celestialBody);
                     UISingletonBuilder builder = new UISingletonBuilder();
 
                     if (celestialBody.TryGetComponent(out IPlanetaryInfo planetaryInfo)) {
+                        
                         builder.AddText(planetaryInfo.GetInfo());
                         builder.AddButton("Move", OnStartMovePlanet);
                         builder.Build(celestialBody.transform, Vector3.zero);
                         
                     }
+                    
+                    PlanetMover.Disable();
+                    
                 }
             }
+        }
+        //Returns 'true' if we touched or hovering on Unity UI element.
+        public bool IsPointerOverUIElement()
+        {
+            return IsPointerOverUIElement(GetEventSystemRaycastResults());
+        }
+ 
+ 
+        //Returns 'true' if we touched or hovering on Unity UI element.
+        private bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+        {
+            for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+            {
+                RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+                if (curRaysastResult.gameObject.layer == LayerMask.NameToLayer("UI"))
+                    return true;
+            }
+            return false;
+        }
+ 
+ 
+        //Gets all event system raycast results of current mouse or touch position.
+        static List<RaycastResult> GetEventSystemRaycastResults()
+        {
+            PointerEventData eventData = new PointerEventData(EventSystem.current);
+            eventData.position = Input.mousePosition;
+            List<RaycastResult> raysastResults = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, raysastResults);
+            return raysastResults;
         }
 
         private void OnStartMovePlanet() {

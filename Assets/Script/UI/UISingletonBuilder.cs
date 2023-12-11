@@ -12,7 +12,9 @@ namespace Script.UI {
         public List<IUIBuilderCommand> _commands = new List<IUIBuilderCommand>();
 
         public void Build(Transform transform, Vector3 vector3) {
-                RectTransform trans = UISingleton.Instance.RequestAt(transform, vector3);
+            RectTransform trans = UISingleton.Instance.RequestAt(transform, vector3);
+            
+            _commands.Insert(0, new AddCloseButton());
             foreach (var command in _commands) {
                 command.Execute(trans);
             }
@@ -29,6 +31,22 @@ namespace Script.UI {
         }
     }
     
+    internal class AddCloseButton : IUIBuilderCommand {
+        public AddCloseButton() {
+            
+        }
+        public void Execute(RectTransform rectTransform) {
+            GameObject textObject =
+                Addressables.InstantiateAsync("UI/Button", rectTransform).WaitForCompletion();
+            textObject.GetComponent<LayoutElement>().preferredHeight *= 0.15f;
+            textObject.GetComponentInChildren<TMP_Text>().text = "X";
+            textObject.GetComponentInChildren<Image>().color = Color.red;
+            textObject.GetComponentInChildren<Button>().onClick.AddListener(() => {
+                UISingleton.Instance.Empty();
+            });
+        }
+    }
+
     internal class AddButtonCommand : IUIBuilderCommand {
         private string text;
         private Action onClick;

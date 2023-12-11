@@ -37,7 +37,6 @@ namespace Script {
             }
 
             if (Input.GetKeyUp(KeyCode.Mouse0)) {
-                EndDrag();
                 dragging = false;
             }
 
@@ -77,6 +76,10 @@ namespace Script {
                 else if (hit.collider == colliderZ) {
                     direction = Vector3.forward;
                 }
+                else {
+                    dragging = false;
+                    return;
+                }
                 
                 
                 Vector3 center = Camera.main.WorldToScreenPoint(transform.position);
@@ -91,6 +94,7 @@ namespace Script {
         
         
 
+        /*
         private void EndDrag() {
             Vector3 endPos = Input.mousePosition;
 
@@ -101,6 +105,7 @@ namespace Script {
             target.position += direction * distance/100f;
 
         }
+        */
 
     }
 }
