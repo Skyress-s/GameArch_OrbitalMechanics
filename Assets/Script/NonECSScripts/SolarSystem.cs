@@ -66,11 +66,18 @@ namespace Script.NonECSScripts
             // collecting celestial bodies added in scene:
             _celestialBodies = new List<CelestialBody>();
 
+            var unitScales = new Dictionary<string, float>
+            {
+                {"length", lengthUnitsPerAU},
+                {"time", secondsPerSimulatedYear},
+                {"mass", massUnitsPerSolarMass},
+            };
             for (var i = 0; i < transform.childCount; i++)
             {
                 _celestialBodies.Add(transform.GetChild(i).GetComponent<CelestialBody>());
                 _celestialBodies[^1].parentSystem = this;
                 _celestialBodies[^1].ArrowType = ArrowMode.Disabled;
+                _celestialBodies[^1].unitScales = unitScales;
             }
 
             if (initialConditions != null)
@@ -207,6 +214,12 @@ namespace Script.NonECSScripts
             newBody.Mass = mass * massUnitsPerSolarMass;
             newBody.AxialTilt = axialTilt;
             newBody.RotationalSpeed = rotRate * secondsPerSimulatedYear * 366.2422f;
+            newBody.unitScales = new Dictionary<string, float>
+            {
+                {"length", lengthUnitsPerAU},
+                {"time", secondsPerSimulatedYear},
+                {"mass", massUnitsPerSolarMass},
+            };
 
             if (forceOrbit)
             {
