@@ -124,8 +124,8 @@ namespace Script.NonECSScripts.Player {
         private void SpawnNewPlanet(Vector3 position) {
             if (system)
             {
-                // Adds a planet with jupiter's mass and correct orbital velocity at position
-                system.AddPlanet(position, true, 0.00095f);
+                // Adds a planet with 10x jupiter's mass and correct orbital velocity at position
+                system.AddPlanet(position, true, 0.0095f);
             }
             Debug.DrawRay(position, Vector3.up * 1000f, Color.red, 100f);
         }
