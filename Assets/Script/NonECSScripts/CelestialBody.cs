@@ -185,7 +185,7 @@ namespace Script.NonECSScripts
                 unitScales.TryGetValue("mass", out var massScale))
             {
                 
-                return $"--{name}--\nMass : {Mass/massScale} Solar masses.\nPosition : {transform.position/lenScale} AU\nVelocity : {Velocity.magnitude*timeScale/lenScale} AU/year\nKinetic Energy : {KineticEnergy()/massScale * (timeScale/lenScale)*(timeScale/lenScale)}";
+                return $"--{name}--\nMass : {Mass/massScale} Solar masses.\nDistance from center of system : {transform.position.magnitude/lenScale} AU\nVelocity : {Velocity.magnitude*timeScale/lenScale} AU/year\nKinetic Energy : {KineticEnergy()/massScale * (timeScale/lenScale)*(timeScale/lenScale)}";
             }
             return $"--{name}--\nMass : {Mass}\nPosition : {transform.position}\nVelocity : {Velocity.magnitude}\nKinetic Energy : {KineticEnergy()}";
 
