@@ -6855,6 +6855,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 5686820958488935333, guid: 0b85dc30763aeed4c9e1a44df855692a,
     type: 3}
+  systemObject: {fileID: 0}
   asteroidCount: 100
   rotateSpeed: -3.7
   beltRotationSpeed: 1
