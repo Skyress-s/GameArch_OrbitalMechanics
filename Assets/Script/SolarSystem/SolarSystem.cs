@@ -4,9 +4,9 @@
 // //FileType: Visual C# Source file
 // //Author : Anders P. Åsbø
 // //Created On : 9/11/2023
-// //Last Modified On : 10/12/2023
+// //Last Modified On : 12/12/2023
 // //Copy Rights : Anders P. Åsbø
-// //Description :
+// //Description : Solar system class for handling physics
 // //////////////////////////////////////////////////////////////////////////
 // //////////////////////////////
 
