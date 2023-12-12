@@ -1,7 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Script.NonECSScripts.Player {
+    /// <summary>
+    /// Mainly developed by: Mathias Mohn Mørch
+    /// </summary>
     public class PlanetPlayer : MonoBehaviour {
         [SerializeField]private CelestialBody targetCelestianBody = null;
         private Camera camera;
