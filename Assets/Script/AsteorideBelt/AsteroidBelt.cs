@@ -47,15 +47,15 @@ public class AsteroidBelt : MonoBehaviour {
         }
 
         if (!_hasSystem) return;
-        // added by Anders:
-        beltRotationSpeed = -Mathf.Sqrt(_system.G * _system.sun.Mass * 10f / innerSize);
+        // calculating orbital speed for belts added by Anders:
+        var dist = 0.5f * (innerSize + outerSize);
+        beltRotationSpeed = -Mathf.Sqrt(_system.G * _system.sun.Mass / dist) / dist * Mathf.Rad2Deg;
     }
 
 
     private void Update() {
-        Vector3 rot = transform.localEulerAngles;
-        rot.y += beltRotationSpeed * Time.deltaTime;
-        transform.localEulerAngles = rot;
+        // below line updated by anders:
+        transform.Rotate(0, beltRotationSpeed * Time.deltaTime, 0);
         
         foreach (var asteroid in asteroids) {
             asteroid.rotation *= Quaternion.Euler(0, rotateSpeed * Time.deltaTime, 0) ;
