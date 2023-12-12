@@ -136,8 +136,8 @@ namespace Script.NonECSScripts
 
                 // find min and max velocity for visualization
                 var vel = currentBody.Velocity.magnitude;
-                _minMaxVelocity.x = Mathf.Min(forceAnalog, minMaxForce.x);
-                _minMaxVelocity.y = Mathf.Max(forceAnalog, minMaxForce.y);
+                _minMaxVelocity.x = Mathf.Min(vel, minMaxVelocity.x);
+                _minMaxVelocity.y = Mathf.Max(vel, minMaxVelocity.y);
             }
         }
 
