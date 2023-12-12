@@ -11,6 +11,8 @@
 // //////////////////////////////
 
 
+using System;
+using System.Collections.Generic;
 using Script.UI;
 using UnityEngine;
 
@@ -35,6 +37,8 @@ namespace Script.NonECSScripts
         [Header("Visualizations")]
         [SerializeField] private ArrowMode arrowMode;
         [SerializeField] private Material material;
+        
+        public Dictionary<string, float> unitScales { get; set; }
 
         private Transform _arrow;
         private bool _hasArrow;
@@ -174,8 +178,17 @@ namespace Script.NonECSScripts
             return 0.5f * mass * Velocity.sqrMagnitude;
         }
 
-        public string GetInfo() {
-            return $"--{name}--\nMass : {Mass}\nPosition : {transform.position}\nVelocity : {Velocity}\nKinetic Energy : {KineticEnergy()}";
+        public string GetInfo()
+        {
+            if (unitScales.TryGetValue("length", out var lenScale) &&
+                unitScales.TryGetValue("time", out var timeScale) &&
+                unitScales.TryGetValue("mass", out var massScale))
+            {
+                
+                return $"--{name}--\nMass : {Mass/massScale} Solar masses.\nDistance from center of system : {transform.position.magnitude/lenScale} AU\nVelocity : {Velocity.magnitude*timeScale/lenScale} AU/year\nKinetic Energy : {KineticEnergy()/massScale * (timeScale/lenScale)*(timeScale/lenScale)}";
+            }
+            return $"--{name}--\nMass : {Mass}\nPosition : {transform.position}\nVelocity : {Velocity.magnitude}\nKinetic Energy : {KineticEnergy()}";
+
         }
     }
 }

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Script.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 
 namespace Script.NonECSScripts.Player {
     public class PlanetPlayerController : PlayerController {
@@ -20,6 +18,8 @@ namespace Script.NonECSScripts.Player {
         private Vector2 _mousePosLastFrame;
         
         [SerializeField] private Collider XZCollider;
+        
+        [Header("System")] [SerializeField] private SolarSystem system;
 
         private void Awake() {
             if (Instance != null) {
@@ -123,7 +123,11 @@ namespace Script.NonECSScripts.Player {
 
 
         private void SpawnNewPlanet(Vector3 position) {
-            // Logic here for spawning new planet!
+            if (system)
+            {
+                // Adds a planet with 10x jupiter's mass and correct orbital velocity at position
+                system.AddPlanet(position, true, 0.0095f);
+            }
             Debug.DrawRay(position, Vector3.up * 1000f, Color.red, 100f);
         }
  
