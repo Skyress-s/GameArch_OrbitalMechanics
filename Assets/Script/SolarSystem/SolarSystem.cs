@@ -44,7 +44,7 @@ namespace Script.NonECSScripts
         private Vector2 _minMaxVelocity = new Vector2(float.MaxValue, float.MinValue);
 
         // ReSharper disable once InconsistentNaming
-        public float G { get; set; }
+        public float G { get; private set; }
         public float systemMass => _totalMass;
 
         public Vector2 minMaxForce => _minMaxForce;
