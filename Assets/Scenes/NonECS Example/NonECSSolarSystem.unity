@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3693926, g: 0.18115625, b: 0.484383, a: 1}
+  m_IndirectSpecularColor: {r: 0.36915562, g: 0.18094467, b: 0.4841863, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6855,7 +6855,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   asteroidPrefab: {fileID: 5686820958488935333, guid: 0b85dc30763aeed4c9e1a44df855692a,
     type: 3}
-  systemObject: {fileID: 0}
+  systemObject: {fileID: 1394167577983025186}
   asteroidCount: 100
   rotateSpeed: -3.7
   beltRotationSpeed: 1
@@ -8860,7 +8860,7 @@ PrefabInstance:
     - target: {fileID: 7973327804128659601, guid: 876f2f003a1233849b79d82afc057dbe,
         type: 3}
       propertyPath: massUnitsPerSolarMass
-      value: 10
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7973327804128659601, guid: 876f2f003a1233849b79d82afc057dbe,
         type: 3}
@@ -8924,12 +8924,18 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1394167577983025183}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1394167577983025186}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3148da51c45acad438a3eb8a4446a059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1394167577983025186 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6043174763338144248, guid: 876f2f003a1233849b79d82afc057dbe,
+    type: 3}
+  m_PrefabInstance: {fileID: 1394167577983025183}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2884928479027248253
 PrefabInstance:
   m_ObjectHideFlags: 0
