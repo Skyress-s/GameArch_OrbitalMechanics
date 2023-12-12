@@ -44,7 +44,7 @@ namespace Script.NonECSScripts
         private Vector2 _minMaxVelocity = new Vector2(float.MaxValue, float.MinValue);
 
         // ReSharper disable once InconsistentNaming
-        public float G { get; set; }
+        public float G { get; private set; }
         public float systemMass => _totalMass;
 
         public Vector2 minMaxForce => _minMaxForce;
@@ -136,8 +136,8 @@ namespace Script.NonECSScripts
 
                 // find min and max velocity for visualization
                 var vel = currentBody.Velocity.magnitude;
-                _minMaxVelocity.x = Mathf.Min(forceAnalog, minMaxForce.x);
-                _minMaxVelocity.y = Mathf.Max(forceAnalog, minMaxForce.y);
+                _minMaxVelocity.x = Mathf.Min(vel, minMaxVelocity.x);
+                _minMaxVelocity.y = Mathf.Max(vel, minMaxVelocity.y);
             }
         }
 
