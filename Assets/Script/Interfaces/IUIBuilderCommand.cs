@@ -1,5 +1,16 @@
 ﻿using UnityEngine;
 
+// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
+// //FileName: UIBuilderCommand.cs
+// //FileType: Visual C# Source file
+// //Author : Mathias Mohn Mørch
+// //Created On : 12/12/2023
+// //Last Modified On : 12/12/2023
+// //Copy Rights : Mathias Mohn Mørch
+// //Description :
+// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
 namespace Script.Interfaces {
     public interface IUIBuilderCommand {
         public void Execute(RectTransform rectTransform);

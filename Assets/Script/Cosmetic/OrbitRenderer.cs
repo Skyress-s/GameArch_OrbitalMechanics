@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Collections;
-using Unity.VisualScripting;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
+// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
+// //FileName: OrbitRenderer.cs
+// //FileType: Visual C# Source file
+// //Author : Mathias Mohn Mørch
+// //Created On : 12/12/2023
+// //Last Modified On : 12/12/2023
+// //Copy Rights : Mathias Mohn Mørch
+// //Description :
+// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
 namespace Script.NonECSScripts.Cosmetic {
-    // TODO make it so that it works better when chaning orbits
     public class OrbitRenderer : MonoBehaviour {
         private TrailRenderer _lr;
         [SerializeField] public Color _color = Color.white;

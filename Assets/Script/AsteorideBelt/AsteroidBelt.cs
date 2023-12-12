@@ -5,6 +5,17 @@ using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
+// //FileName: AsteroidBelt.cs
+// //FileType: Visual C# Source file
+// //Author : Mathias Mohn Mørch
+// //Created On : 12/12/2023
+// //Last Modified On : 12/12/2023
+// //Copy Rights : Mathias Mohn Mørch
+// //Description :
+// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
 public class AsteroidBelt : MonoBehaviour {
     
     [SerializeField] private GameObject asteroidPrefab;

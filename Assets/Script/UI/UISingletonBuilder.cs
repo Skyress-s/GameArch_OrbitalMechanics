@@ -7,6 +7,17 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
+// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
+// //FileName: UISingletonBuilder.cs
+// //FileType: Visual C# Source file
+// //Author : Mathias Mohn Mørch
+// //Created On : 12/12/2023
+// //Last Modified On : 12/12/2023
+// //Copy Rights : Mathias Mohn Mørch
+// //Description :
+// //////////////////////////////////////////////////////////////////////////
+// //////////////////////////////
 namespace Script.UI {
     // Builder / Factory pattern
     public class UISingletonBuilder {
