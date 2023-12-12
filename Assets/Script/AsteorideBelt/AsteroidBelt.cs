@@ -36,6 +36,7 @@ public class AsteroidBelt : MonoBehaviour {
         }
 
         if (!_hasSystem) return;
+        // added by Anders:
         beltRotationSpeed = -Mathf.Sqrt(_system.G * _system.sun.Mass * 10f / innerSize);
     }
 
