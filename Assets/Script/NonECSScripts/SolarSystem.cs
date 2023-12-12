@@ -44,14 +44,16 @@ namespace Script.NonECSScripts
         private Vector2 _minMaxVelocity = new Vector2(float.MaxValue, float.MinValue);
 
         // ReSharper disable once InconsistentNaming
-        private float G { get; set; }
+        public float G { get; set; }
         public float systemMass => _totalMass;
 
         public Vector2 minMaxForce => _minMaxForce;
 
         public Vector2 minMaxVelocity => _minMaxVelocity;
 
-        private void Start()
+        public CelestialBody sun => _sun;
+
+        private void Awake()
         {
             // Kepler's 3rd law of planetary motion: a^3/T^2 = G*M/(4*pi^2),
             //  - a: semi-major axis of planet's orbit (set to mean distance between Earth and Sun: 1 astronomical unit).
@@ -95,9 +97,9 @@ namespace Script.NonECSScripts
             if (forceOrbits)
                 foreach (var body in _celestialBodies)
                 {
-                    if (_sun == body) continue;
-                    var r = Vector3.Distance(body.transform.position, _sun.transform.position);
-                    body.Velocity = new Vector3(Mathf.Sqrt(G * _sun.Mass / r), 0f, 0f);
+                    if (sun == body) continue;
+                    var r = Vector3.Distance(body.transform.position, sun.transform.position);
+                    body.Velocity = new Vector3(Mathf.Sqrt(G * sun.Mass / r), 0f, 0f);
                 }
 
             CenterBarycenter();
@@ -145,9 +147,9 @@ namespace Script.NonECSScripts
 
             foreach (var body in _celestialBodies)
             {
-                if (body == _sun) continue;
+                if (body == sun) continue;
                 var pos = body.transform.position;
-                Gizmos.DrawLine(pos, new Vector3(pos.x, _sun.transform.position.y, pos.z));
+                Gizmos.DrawLine(pos, new Vector3(pos.x, sun.transform.position.y, pos.z));
             }
 
             DrawWireDisk(_barycenterPos, lengthUnitsPerAU * 40f, Color.green);
@@ -223,8 +225,8 @@ namespace Script.NonECSScripts
 
             if (forceOrbit)
             {
-                var rVec = pos - _sun.transform.position;
-                newBody.Velocity = Mathf.Sqrt(G * _sun.Mass / rVec.magnitude) * Vector3.Cross(rVec,Vector3.up).normalized;
+                var rVec = pos - sun.transform.position;
+                newBody.Velocity = Mathf.Sqrt(G * sun.Mass / rVec.magnitude) * Vector3.Cross(rVec,Vector3.up).normalized;
             }
 
             _celestialBodies.Add(newBody);
@@ -291,6 +293,8 @@ namespace Script.NonECSScripts
                 _celestialBodies[i].AxialTilt = axialTilts[i];
                 _celestialBodies[i].RotationalSpeed = rotationalSpeeds[i] * daysToSecPerYear;
             }
+
+            _celestialBodies[0].IsSun = true;
         }
     }
 }
