@@ -1,8 +1,4 @@
-﻿using System;
-using Unity.VisualScripting;
-using UnityEngine;
-
-namespace Script {
+﻿using UnityEngine;
     public class PlanetMover : MonoBehaviour {
         
         [SerializeField] private Collider colliderX;
@@ -108,4 +104,3 @@ namespace Script {
         */
 
     }
-}
