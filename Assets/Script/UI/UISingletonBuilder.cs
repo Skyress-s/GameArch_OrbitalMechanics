@@ -96,7 +96,7 @@ namespace Script.UI {
         public void Execute(RectTransform rectTransform) {
             GameObject textObject =
                 Addressables.InstantiateAsync("UI/Button", rectTransform).WaitForCompletion();
-            textObject.GetComponent<LayoutElement>().preferredHeight *= 0.15f;
+            textObject.GetComponent<LayoutElement>().preferredHeight *= 0.25f;
             textObject.GetComponentInChildren<TMP_Text>().text = "X";
             textObject.GetComponentInChildren<Image>().color = Color.red;
             textObject.GetComponentInChildren<Button>().onClick.AddListener(() => {
