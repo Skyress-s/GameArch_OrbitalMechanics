@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Script.Interfaces;
+using Script.NonECSScripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -29,8 +30,34 @@ namespace Script.UI {
             _commands.Add(new AddButtonCommand(text, onClick));
             return this;
         }
+        
+        public UISingletonBuilder AddArrowVisualizer(CelestialBody celestialBody) {
+            _commands.Add(new AddArrowVisualizerCommand(celestialBody));
+            return this;
+        }
     }
     
+    internal class AddArrowVisualizerCommand : IUIBuilderCommand {
+        private CelestialBody _targetCelestialBody;
+        public AddArrowVisualizerCommand(CelestialBody celestialBody) {
+            _targetCelestialBody = celestialBody;
+        }
+        public void Execute(RectTransform rectTransform) {
+            GameObject textObject =
+                Addressables.InstantiateAsync("UI/ArrowButtons", rectTransform).WaitForCompletion();
+            
+            textObject.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => {
+                _targetCelestialBody.ArrowType = ArrowMode.Disabled;
+            });
+            textObject.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(() => {
+                _targetCelestialBody.ArrowType = ArrowMode.Force;
+            });
+            textObject.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(() => {
+                _targetCelestialBody.ArrowType = ArrowMode.Velocity;
+            });
+        }
+    }
+
     internal class AddCloseButton : IUIBuilderCommand {
         public AddCloseButton() {
             

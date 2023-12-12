@@ -74,6 +74,7 @@ namespace Script.NonECSScripts.Player {
                         
                         builder.AddText(planetaryInfo.GetInfo());
                         builder.AddButton("Move", OnStartMovePlanet);
+                        builder.AddArrowVisualizer(celestialBody);
                         builder.Build(celestialBody.transform, Vector3.zero);
                         
                     }
