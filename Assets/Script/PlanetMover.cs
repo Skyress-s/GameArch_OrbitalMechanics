@@ -49,7 +49,7 @@ namespace Script {
             Vector3 v1 = endPos - startPos;
 
             float distance = Vector3.Dot(v1, screenSpaceForward);
-            Debug.LogWarning($"ScreenSpaceForward : {screenSpaceForward} | v1 : {v1} | distance : {distance}");
+            // Debug.LogWarning($"ScreenSpaceForward : {screenSpaceForward} | v1 : {v1} | distance : {distance}");
             target.position += direction * distance/100f;
             startPos = endPos;
         }

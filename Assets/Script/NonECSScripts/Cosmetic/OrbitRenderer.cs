@@ -29,8 +29,14 @@ namespace Script.NonECSScripts.Cosmetic {
             if (_lr == null) {
                 return;
             }
+
+            if (_lr.positionCount == 0) {
+                return;
+                // Debug.LogWarning($"Gameobject {gameObject.name} has no positions in its line renderer.");
+            }
             
             Vector3 lastTrailPos = _lr.GetPosition(0);
+            
             
             if (Vector3.Distance(lastTrailPos, transform.position) < 0.4f && _lr.positionCount >= 2) { // last point close enough
                 Vector3 secondLastTrailPos = _lr.GetPosition(1);
