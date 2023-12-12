@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Script.NonECSScripts;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -7,6 +8,7 @@ using Random = UnityEngine.Random;
 public class AsteroidBelt : MonoBehaviour {
     
     [SerializeField] private GameObject asteroidPrefab;
+    [SerializeField] private GameObject systemObject;
     
     [SerializeField] private int asteroidCount = 100;
     [SerializeField] private float rotateSpeed = 10f;
@@ -14,9 +16,17 @@ public class AsteroidBelt : MonoBehaviour {
     [SerializeField] private float innerSize = 2f;
     [SerializeField] private float outerSize = 5f;
 
+    private SolarSystem _system;
+    private bool _hasSystem;
+
     private List<Transform> asteroids = new List<Transform>();
 
-    private void Start() {
+    private void Start()
+    {
+
+        _hasSystem = systemObject.TryGetComponent<SolarSystem>(out _system);
+        _hasSystem = _system != null;
+        
         float stepAngles = 360f / (float)asteroidCount;
         for (int i = 0; i < asteroidCount; i++) {
             Vector3 position = transform.position + Quaternion.Euler(0, stepAngles * i, 0) * Vector3.forward * UnityEngine.Random.Range(innerSize, outerSize);
@@ -24,6 +34,9 @@ public class AsteroidBelt : MonoBehaviour {
             trans.localScale *= Random.Range(0.04f, 0.2f);
             asteroids.Add(trans);
         }
+
+        if (!_hasSystem) return;
+        beltRotationSpeed = -Mathf.Sqrt(_system.G * _system.sun.Mass * 10f / innerSize);
     }
 
 
