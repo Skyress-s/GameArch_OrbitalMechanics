@@ -33,7 +33,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 16dbdf157f5ac8f439edeb5db0fbfcea
-    m_Address: Velocity
+    m_Address: UI/ArrowButtons
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 75bbea8bfb464154a961d63fdcb94228
+    m_Address: UI/Slider
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

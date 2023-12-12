@@ -35,6 +35,37 @@ namespace Script.UI {
             _commands.Add(new AddArrowVisualizerCommand(celestialBody));
             return this;
         }
+        
+        public UISingletonBuilder AddMassSlider(CelestialBody celestialBody) {
+            _commands.Add(new AddMassSliderCommand(celestialBody));
+            return this;
+        }
+    }
+
+    internal class AddMassSliderCommand : IUIBuilderCommand {
+        private CelestialBody _targetCelestialBody;
+        public AddMassSliderCommand(CelestialBody celestialBody) {
+            _targetCelestialBody = celestialBody;
+        }
+        public void Execute(RectTransform rectTransform) {
+            GameObject textObject =
+                Addressables.InstantiateAsync("UI/Slider", rectTransform).WaitForCompletion();
+            
+            
+            TMP_Text textUI = textObject.GetComponentInChildren<TMP_Text>();
+            Slider slider = textObject.GetComponent<Slider>();
+
+            float scalar = _targetCelestialBody.unitScales["mass"];
+            
+            // set initial value
+            slider.value = _targetCelestialBody.Mass / scalar;
+            
+            // Set value
+            slider.onValueChanged.AddListener((float x) => {
+                textUI.text = $"Solar Masses: {x:F1}";
+                _targetCelestialBody.Mass = Mathf.Lerp(0.00001f, 1f, x) * scalar;
+            });
+        }
     }
     
     internal class AddArrowVisualizerCommand : IUIBuilderCommand {

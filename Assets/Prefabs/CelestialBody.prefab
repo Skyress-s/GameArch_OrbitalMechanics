@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8241964542569361435}
   - component: {fileID: 5575504054142855192}
   - component: {fileID: 8094412152999192909}
+  - component: {fileID: 5684889753027496369}
   m_Layer: 0
   m_Name: CelestialBody
   m_TagString: Untagged
@@ -102,6 +103,27 @@ MonoBehaviour:
   isSun: 0
   arrowMode: 2
   material: {fileID: 2100000, guid: cd4873133dc97494a86a25f1d14ca1a9, type: 2}
+--- !u!135 &5684889753027496369
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1317402899607789557}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &6900991564253410602
 PrefabInstance:
   m_ObjectHideFlags: 0
